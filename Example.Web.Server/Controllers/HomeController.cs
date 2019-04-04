@@ -5,13 +5,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Example.Web.Server.Models;
+using Example.Library.Application;
 
 namespace Example.Web.Server.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ISomeRandomInterface _someRandomDependency;
+
+        public HomeController(ISomeRandomInterface someRandomDependency)
+        {
+            _someRandomDependency = someRandomDependency;
+        }
+
         public IActionResult Index()
         {
+            MakeSomeMagic();
             return View();
         }
 
@@ -24,6 +33,13 @@ namespace Example.Web.Server.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public void MakeSomeMagic()
+        {
+            _someRandomDependency.GiveMe(true);
+            _someRandomDependency.GiveMe(int.MinValue);
+            _someRandomDependency.GiveMe("abcdefㅂㅈㄷㄱㅕㅑㅐㅔ");
         }
     }
 }
